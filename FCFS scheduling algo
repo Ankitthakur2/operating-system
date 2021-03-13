@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+struct process
+{
+int id,arrival,burst,completion,turn,waiting;    
+};
+
+bool compare(process p1,process p2)
+{
+    return p1.arrival<p2.arrival;
+}
+int main()
+{
+    process p[100];
+    
+    int n;
+    cout<<"Enter the number of processes"<<endl;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+    cout<<"Enter process ID "<<endl;
+    cin>>p[i].id;
+    cout<<"Enter the arrival time"<<endl;
+    cin>>p[i].arrival;
+    cout<<"Enter the burst time"<<endl;
+    cin>>p[i].burst;
+    }
+    
+    sort(p,p+n,compare);
+    p[0].waiting=0;
+    p[0].completion=p[0].burst+p[0].arrival;
+    p[0].turn=p[0].completion-p[0].arrival;
+    
+    for(int i=1;i<n;i++)
+    {
+        if(p[i].arrival<=p[i-1].completion)
+        {
+            p[i].completion=p[i].burst+p[i-1].completion;
+            p[i].turn=p[i].completion-p[i].arrival;
+            p[i].waiting=p[i].turn-p[i].burst;
+        }
+        else
+        {
+            p[i].completion=p[i].burst+p[i].arrival;
+           p[i].turn=p[i].completion-p[i].arrival;
+            p[i].waiting=p[i].turn-p[i].burst;  
+            
+        }
+    }
+    cout<<"ID "<<"  "<<"AT "<<" "<<"BT"<<" "<<"CT"<<" "<<"TA"<<" "<<"  WA"<<endl;
+    for(int i=0;i<n;i++)
+    {
+        cout<<p[i].id<<"   "<<p[i].arrival<<"   "<<p[i].burst<<"   "<<p[i].completion<<"   "<<p[i].turn
+        <<"  "<<p[i].waiting<<endl;
+    }
+    
+    return 0;
+}
